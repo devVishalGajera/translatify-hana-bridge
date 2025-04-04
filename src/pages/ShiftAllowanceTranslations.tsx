@@ -1,15 +1,25 @@
 
 import React, { useState, useEffect } from 'react';
-import { fetchTranslations, Translation } from '@/lib/api';
-import TranslationTable from '@/components/TranslationTable';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { fetchTranslations, fetchModules, fetchSections } from '@/lib/api';
+import TranslationTable from '@/components/TranslationTable';
 
 const ShiftAllowanceTranslations = () => {
-  const [translations, setTranslations] = useState<Translation[]>([]);
+  const [translations, setTranslations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
+  const [modules, setModules] = useState([]);
+  const [sections, setSections] = useState([]);
+
+  useEffect(() => {
+    Promise.all([
+      loadTranslations(),
+      loadModules(),
+      loadSections()
+    ]);
+  }, []);
 
   const loadTranslations = async () => {
     setLoading(true);
@@ -26,29 +36,33 @@ const ShiftAllowanceTranslations = () => {
     }
   };
 
-  useEffect(() => {
-    loadTranslations();
-  }, []);
+  const loadModules = async () => {
+    try {
+      const data = await fetchModules();
+      setModules(data);
+    } catch (err) {
+      console.error('Failed to load modules:', err);
+    }
+  };
+
+  const loadSections = async () => {
+    try {
+      const data = await fetchSections();
+      setSections(data);
+    } catch (err) {
+      console.error('Failed to load sections:', err);
+    }
+  };
 
   return (
     <div className="container mx-auto py-8">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <Link to="/">
-            <Button variant="outline" size="icon">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-          </Link>
-          <h1 className="text-2xl font-bold">Shift Allowance Module Translations</h1>
-        </div>
-        <Button 
-          variant="outline" 
-          onClick={loadTranslations}
-          disabled={loading}
-        >
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
+      <div className="flex items-center gap-2 mb-6">
+        <Link to="/">
+          <Button variant="outline" size="icon">
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+        </Link>
+        <h1 className="text-2xl font-bold">Shift Allowance Translations</h1>
       </div>
 
       {loading ? (
@@ -62,22 +76,12 @@ const ShiftAllowanceTranslations = () => {
       ) : (
         <TranslationTable 
           translations={translations} 
-          module="shift_allowance"
+          module="shift_allowance" 
           onUpdate={loadTranslations}
+          modules={modules}
+          sections={sections}
         />
       )}
-      
-      <div className="mt-8 p-4 bg-gray-50 rounded-md border border-gray-200">
-        <h2 className="text-lg font-medium mb-2">Backend Integration Notes</h2>
-        <p className="text-sm text-gray-600">
-          This component is currently using mock data. To connect to your actual Node.js backend:
-        </p>
-        <ol className="list-decimal list-inside mt-2 text-sm text-gray-600 space-y-1">
-          <li>Set up your Node.js backend with SAP HANA integration</li>
-          <li>Update the API_BASE_URL in src/lib/api.ts to point to your backend</li>
-          <li>Ensure your backend implements the required endpoints for fetching and updating translations</li>
-        </ol>
-      </div>
     </div>
   );
 };

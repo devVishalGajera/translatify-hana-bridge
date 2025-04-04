@@ -32,6 +32,14 @@ export interface Section {
   active?: boolean;
 }
 
+export interface Language {
+  id: string;
+  code: string;
+  name: string;
+  active: boolean;
+  is_default: boolean;
+}
+
 /**
  * Fetch translations for a specific module
  */
@@ -213,6 +221,154 @@ export async function fetchSections(moduleId?: string): Promise<Section[]> {
       { id: 'weekend_allowance', name: 'Weekend Allowance', module: 'shift_allowance', active: true },
       { id: 'holiday_pay', name: 'Holiday Pay', module: 'shift_allowance', active: true }
     ].filter(section => !moduleId || section.module === moduleId);
+  }
+}
+
+/**
+ * Fetch all languages
+ */
+export async function fetchLanguages(): Promise<Language[]> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/languages`);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch languages: ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching languages:', error);
+    // Return mock data
+    return [
+      { id: '1', code: 'en', name: 'English', active: true, is_default: true },
+      { id: '2', code: 'de', name: 'German', active: true, is_default: false },
+      { id: '3', code: 'fr', name: 'French', active: true, is_default: false },
+      { id: '4', code: 'es', name: 'Spanish', active: true, is_default: false },
+      { id: '5', code: 'it', name: 'Italian', active: false, is_default: false }
+    ];
+  }
+}
+
+/**
+ * Add a new language
+ */
+export async function addLanguage(language: Partial<Language>): Promise<Language> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/languages`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(language),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to add language: ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error adding language:', error);
+    // Mock response for now
+    return {
+      id: Date.now().toString(),
+      code: language.code || '',
+      name: language.name || '',
+      active: language.active !== undefined ? language.active : true,
+      is_default: language.is_default !== undefined ? language.is_default : false
+    };
+  }
+}
+
+/**
+ * Update a language
+ */
+export async function updateLanguage(id: string, language: Partial<Language>): Promise<{ id: string, message: string }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/languages/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(language),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to update language: ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating language:', error);
+    // Mock response for now
+    return { id, message: 'Language updated successfully' };
+  }
+}
+
+/**
+ * Delete a language
+ */
+export async function deleteLanguage(id: string): Promise<{ success: boolean }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/languages/${id}`, {
+      method: 'DELETE',
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to delete language: ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error deleting language:', error);
+    // Mock success for now
+    return { success: true };
+  }
+}
+
+/**
+ * Toggle language active status
+ */
+export async function toggleLanguageStatus(id: string, active: boolean): Promise<{ success: boolean }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/languages/${id}/status`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ active }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to update language status: ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error updating language status:', error);
+    // Mock success for now
+    return { success: true };
+  }
+}
+
+/**
+ * Set a language as default
+ */
+export async function setDefaultLanguage(id: string): Promise<{ success: boolean }> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/languages/${id}/default`, {
+      method: 'PUT',
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Failed to set default language: ${response.statusText}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error('Error setting default language:', error);
+    // Mock success for now
+    return { success: true };
   }
 }
 
