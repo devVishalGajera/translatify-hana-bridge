@@ -1,73 +1,55 @@
-# Welcome to your Lovable project
 
-## Project info
+# SAP HANA Translation Management System
 
-**URL**: https://lovable.dev/projects/28a2ad31-34f1-441e-9cca-5315dc9c244f
+A React-based frontend for managing translations in SAP HANA applications. This application provides a user interface for creating, editing, and managing translations across different modules and sections.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- **Module Management**: Create, edit, and delete modules
+- **Section Management**: Organize translations in logical sections within modules
+- **Translation Management**: Create, edit, delete, and toggle active status for translations
+- **Multi-language Support**: Manage translations for English, German, French, and Spanish
+- **Import/Export**: Upload translations from Excel or JSON files
 
-**Use Lovable**
+## Getting Started
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/28a2ad31-34f1-441e-9cca-5315dc9c244f) and start prompting.
+### Prerequisites
 
-Changes made via Lovable will be committed automatically to this repo.
+- Node.js (v14 or higher)
+- npm or yarn
 
-**Use your preferred IDE**
+### Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+1. Clone this repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Start the development server:
+   ```
+   npm run dev
+   ```
+4. Open your browser and navigate to http://localhost:5173
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Backend Integration
 
-Follow these steps:
+This frontend is designed to work with a Node.js backend that connects to a SAP HANA database. By default, it uses mock data for development purposes.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+To connect to the actual backend:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Start the backend server (see backend README)
+2. Update the `API_BASE_URL` in `src/lib/api.ts` to point to your backend server address
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Structure
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- `src/components` - Reusable React components
+- `src/pages` - Page components for different routes
+- `src/lib` - Utility functions and API client
+- `src/backend` - Backend API server (Node.js with SAP HANA integration)
 
-**Edit a file directly in GitHub**
+## Technologies
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/28a2ad31-34f1-441e-9cca-5315dc9c244f) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **React**: UI library
+- **React Router**: Navigation and routing
+- **shadcn/ui**: UI component library
+- **Tailwind CSS**: Utility-first CSS framework
