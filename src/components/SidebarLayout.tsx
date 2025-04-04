@@ -17,7 +17,7 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { 
   Globe, 
-  BookTranslation, 
+  Languages, 
   MessagesSquare, 
   FolderKanban, 
   Server,
@@ -82,7 +82,7 @@ const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive("/translation-management")}>
                       <Link to="/translation-management">
-                        <BookTranslation className="h-5 w-5" />
+                        <Languages className="h-5 w-5" />
                         <span>Translations</span>
                       </Link>
                     </SidebarMenuButton>
